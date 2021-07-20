@@ -2,11 +2,14 @@ package com.example.dragtest;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+//import android.graphics.Canvas;
+//import android.graphics.Paint;
+//import android.graphics.Path;
+//import android.graphics.Point;
+import android.app.Fragment;
 import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Path;
-import android.graphics.Point;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     private Button circle=null;
     private Button rectangle=null;
     private Button triangle=null;
+    private View dropzone = null;
 
     private MyTouchListener touch= new MyTouchListener();
 
@@ -29,53 +33,41 @@ public class MainActivity extends AppCompatActivity {
 
         rectangle=(Button)findViewById(R.id.rectangle);
         rectangle.setOnTouchListener(touch);
-        rectangle.setOnDragListener(new MyDragListener());
 
         circle=(Button)findViewById(R.id.circle);
         circle.setOnTouchListener(touch);
-        circle.setOnDragListener(new MyDragListener());
 
         triangle=(Button)findViewById(R.id.triangle);
         triangle.setOnTouchListener(touch);
-        triangle.setOnDragListener(new com.example.dragtest.MainActivity.MyDragListener());
-
     }
 
-//    private final class MyTouchListener implements View.OnTouchListener {
-//        public boolean onTouch(View view, MotionEvent motionEvent) {
-//            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-//                // selectedButton
-//                final int id = view.getId();
-//                switch(id){
-//                    case R.id.circle:
-//                        selectedItem="circle";
-//                        break;
-//                    case R.id.rectangle:
-//                        selectedItem="rectangle";
-//                        break;
-//                    case R.id.triangle:
-//                        selectedItem="triangle";
-//                        break;
-//                }
-//
-//                return true;
-//            }
-//        }
-//    }
-//
-//    private final class MyDragListener implements View.OnDragListener {
-//        public boolean onDrag(View v, DragEvent event) {
-//            final int id = v.getId();
-//            switch (event.getAction()) {
-//                case DragEvent.ACTION_DRAG_STARTED:
-//                    // do nothing
-//                    break;
-//                case DragEvent.ACTION_DRAG_ENTERED:
-//                    break;
-//                case DragEvent.ACTION_DRAG_EXITED:
-//                    break;
-//                case DragEvent.ACTION_DROP:
-//                    // Dropped, reassign View to ViewGroup
+    private final class MyTouchListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+                final int id = v.getId();
+                if(id == R.id.circle) {
+                    selectedItem="circle";
+                } else if( id == R.id.rectangle) {
+                    selectedItem="rectangle";
+                } else if( id == R.id.triangle ) {
+                    selectedItem="triangle";
+                }
+                Log.v("Test",selectedItem);
+        }
+    }
+
+    private final class MyDragListener implements View.OnDragListener {
+        public boolean onDrag(View v, DragEvent event) {
+            final int id = v.getId();
+            switch (event.getAction()) {
+                case DragEvent.ACTION_DRAG_STARTED:
+                    // do nothing
+                    break;
+                case DragEvent.ACTION_DRAG_ENTERED:
+                    break;
+                case DragEvent.ACTION_DRAG_EXITED:
+                    break;
+                case DragEvent.ACTION_DROP:
 //                    if(id != R.id.dropzone || !(v instanceof Canvas)){
 //                        return true;
 //                    }
@@ -84,18 +76,18 @@ public class MainActivity extends AppCompatActivity {
 //                    final Canvas c = (Canvas)v;
 //                    switch(selectedItem){
 //                        case "rectangle":
-//                            Paint p = new Paint();
-//                            p. setARGB(0, 255, 0, 0);
-//                            c.drawRect(x,y,x+5,y+5,p);
+//                            Paint rp = new Paint();
+//                            rp. setARGB(0, 255, 0, 0);
+//                            c.drawRect(x,y,x+5,y+5,rp);
 //                            break;
 //                        case "circle":
-//                            Paint p = new Paint();
-//                            p. setARGB(0, 255, 0, 128);
-//                            c.drawCircle(x,y,100,p);
+//                            Paint cp = new Paint();
+//                            cp. setARGB(0, 255, 0, 128);
+//                            c.drawCircle(x,y,100,cp);
 //                            break;
 //                        case "triangle":
-//                            Paint p = new Paint();
-//                            p. setARGB(0, 255, 144, 128);
+//                            Paint tp = new Paint();
+//                            tp. setARGB(0, 255, 144, 128);
 //
 //                            Point a = new Point(x,y);
 //                            Point b = new Point(x-5, y+5);
@@ -108,19 +100,18 @@ public class MainActivity extends AppCompatActivity {
 //                            path.lineTo(a.x, a.y);
 //                            path.close();
 //
-//                            c.drawPath(path, p);
-//                            break;
-//                    }
-//
-//                    break;
-//                case DragEvent.ACTION_DRAG_ENDED:
-//
-//                default:
-//                    break;
-//            }
-//            return true;
-//
-//        }
-//    }
+//                            c.drawPath(path, tp);
 
+//                    }
+
+                    break;
+                case DragEvent.ACTION_DRAG_ENDED:
+
+                default:
+                    break;
+            }
+            return true;
+
+        }
+    }
 }
