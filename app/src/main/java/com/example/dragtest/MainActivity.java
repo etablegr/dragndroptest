@@ -57,20 +57,18 @@ public class MainActivity extends AppCompatActivity {
 
     private final class ImgTouchEvent implements View.OnTouchListener
     {
-
         @Override
-        public boolean onTouch(View v, MotionEvent event) {
-
-            int eventAction = event.getAction();
-
-            if(eventAction == MotionEvent.ACTION_DOWN){
-                ClipData.Item shape = new ClipData.Item((CharSequence) v.getTag());
+        public boolean onTouch(final View v,final MotionEvent event)
+        {
+            if(event.getAction() == MotionEvent.ACTION_DOWN)
+            {
+                int id = v.getId();
                 View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(v);
                 String[] mimeTypes = {ClipDescription.MIMETYPE_TEXT_PLAIN};
-                ClipData draggedData = new ClipData(new ClipDescription("ClipData".toString(),mimeTypes),shape);
+                ClipData draggedData = new ClipData(new ClipDescription("Shape".toString(),mimeTypes),new ClipData.Item("Image: "+id));
                 v.startDragAndDrop(draggedData,shadowBuilder,v,0);
+                return true;
             }
-
             return false;
         }
     }
@@ -149,8 +147,7 @@ public class MainActivity extends AppCompatActivity {
                     ClipData.Item item = event.getClipData().getItemAt(0);
 
                     String shape = item.getText().toString();
-                    Log.v("DROP","Coordinates: "+event.getX()+" , "+event.getY());
-                    Log.v("DROP","Shape: "+shape);
+                    shape.replace("Image: ","");
 
                     Drawable d = null;
 
@@ -166,17 +163,27 @@ public class MainActivity extends AppCompatActivity {
                             break;
                     }
 
-                    Context ctx = v.getContext();
-                    img = new ImageView(ctx);
-                    img.setImageDrawable(d);
-                    img.setX(event.getX());
-                    img.setY(event.getY());
-                    img.setTag(shape);
-                    img.setOnTouchListener(new ImgTouchEvent());
+                    // Assuming shape is how table will look like
+                    // APi Call here?
+                    if(d == null){
+                        int imageId = Integer.parseInt(shape.replace("Image: ",""));
+                        img = (ImageView)findViewById(imageId);
+                        img.setX(event.getX());
+                        img.setY(event.getY());
+                    } else {
+                        Context ctx = v.getContext();
+                        img = new ImageView(ctx);
+                        img.setId(View.generateViewId());
+                        img.setImageDrawable(d);
+                        img.setX(event.getX());
+                        img.setY(event.getY());
+                        img.setTag(shape);
+                        img.setOnTouchListener(new ImgTouchEvent());
 
-                    ConstraintLayout layout = (ConstraintLayout)v;
-                    layout.addView(img);
-
+                        ConstraintLayout layout = (ConstraintLayout)v;
+                        layout.addView(img);
+                    }
+                    // Or here?
                     break;
                 case DragEvent.ACTION_DRAG_ENDED:
 
