@@ -67,7 +67,6 @@ public class MainActivity extends AppCompatActivity {
                 String[] mimeTypes = {ClipDescription.MIMETYPE_TEXT_PLAIN};
                 ClipData draggedData = new ClipData(new ClipDescription("ClipData".toString(),mimeTypes),shape);
                 v.startDragAndDrop(draggedData,shadowBuilder,v,0);
-                v.
             }
 
             return false;
