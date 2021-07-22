@@ -13,6 +13,7 @@ import android.content.ClipData;
 import android.content.ClipDescription;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ButtonClickEvent touch= new ButtonClickEvent();
     private MyDragListener d =new MyDragListener();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,8 +93,6 @@ public class MainActivity extends AppCompatActivity {
                     shape = new ClipData.Item("triangle");
                     shadow = getResources().getDrawable(R.drawable.triangle, null);
                 }
-                ImageView shadowImage = new ImageView(v.getContext());
-                shadowImage.setImageDrawable(shadow);
 
                 View.DragShadowBuilder shadowBuilder = new ShapeShadowBuilder(v,shadow);
 
@@ -113,6 +113,13 @@ public class MainActivity extends AppCompatActivity {
                     throw new NullPointerException("Drawable should not be NUll");
                 }
                 this.d = d;
+            }
+
+            @Override
+            public void onProvideShadowMetrics(Point shadowSize, Point shadowTouchPoint)
+            {
+                super.onProvideShadowMetrics(shadowSize,shadowTouchPoint);
+                this.d.setBounds(shadowTouchPoint.x+3,shadowTouchPoint.y+3,shadowSize.x,shadowSize.y);
             }
 
             @Override
