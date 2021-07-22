@@ -30,8 +30,10 @@
                     android:layout_height="match_parent"
                     android:text="Triangle" />
         </LinearLayout>
-        <View android:id="@+id/dropzone"
+        <androidx.constraintlayout.widget.ConstraintLayout android:id="@+id/dropzone"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </View>
+            android:layout_height="match_parent"
+            android:background="@color/background_color">
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>
